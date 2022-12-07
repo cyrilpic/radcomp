@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "radcomp"
+version = "1.0.0b"
+
+dependencies = [
+    "numpy",
+    "scipy",
+    "CoolProp >= 6.0",
+]
+
+[tool.setuptools]
+packages = ['radcomp']
