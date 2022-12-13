@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import Union
 
 import CoolProp as CP
-from scipy import optimize
 
 from .base import Fluid, ThermoException, ThermoProp
 
@@ -15,7 +14,8 @@ cp_inputs = {
     'HS': (CP.iHmass, CP.iSmass),
     'PH': (CP.iP, CP.iHmass),
     'PS': (CP.iP, CP.iSmass),
-    'TQ': (CP.iT, CP.iQ)
+    'TQ': (CP.iT, CP.iQ),
+    'PQ': (CP.iP, CP.iQ)
 }
 
 cp_outputs = {'P': CP.iP, 'T': CP.iT, 'D': CP.iDmass, 'H': CP.iHmass, 'S': CP.iSmass}
@@ -35,6 +35,30 @@ class CoolPropFluid(Fluid):
 
     def __post_init__(self):
         self.state = CP.AbstractState('HEOS', self.name.upper())
+
+    @property
+    def P_max(self) -> float:
+        return self.state.pmax()
+
+    @property
+    def T_max(self) -> float:
+        return self.state.Tmax()
+
+    @property
+    def P_crit(self) -> float:
+        return self.state.p_critical()
+
+    @property
+    def T_crit(self) -> float:
+        return self.state.T_critical()
+
+    @property
+    def P_triple(self) -> float:
+        return self.state.keyed_output(CP.iP_triple)
+
+    @property
+    def T_triple(self) -> float:
+        return self.state.Ttriple()
 
     def thermo_prop(self, in_type: Union[str, int], in1: float, in2: float) -> "ThermoProp":
         if isinstance(in_type, str):

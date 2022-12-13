@@ -30,13 +30,23 @@ refprop_phase = {
 @dataclass
 class RefpropFluid(Fluid):
     name: str
-    Pmax: float = field(init=False)
+    P_max: float = field(init=False)
+    T_max: float = field(init=False)
+    P_crit: float = field(init=False)
+    T_crit: float = field(init=False)
+    P_triple: float = field(init=False)
+    T_triple: float = field(init=False)
 
     def __post_init__(self):
-        r = RP.REFPROPdll(self.name, '', 'PMAX', MASS_BASE_SI, 0, 0, 0., 0., [1.0])
+        r = RP.REFPROPdll(self.name, '', 'PMAX;TMAX;Pc;Tc;PTRP;TTRP', MASS_BASE_SI, 0, 0, 0., 0., [1.0])
         if r.ierr != 0:
             raise ThermoException(r.herr)
-        self.Pmax = r.Output[0]
+        self.P_max = r.Output[0]
+        self.T_max = r.Output[1]
+        self.P_crit = r.Output[2]
+        self.T_crit = r.Output[3]
+        self.P_triple = r.Output[4]
+        self.T_triple = r.Output[5]
 
     def activate(self):
         RP.SETFLUIDSdll(self.name)

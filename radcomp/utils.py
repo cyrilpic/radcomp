@@ -10,6 +10,7 @@ from .thermo import ThermoProp
 
 
 def scaled_geometry(r4, beta4, b4r4, n_blades, r2sor4, r2sor2h, Cmin, CR):
+    """Return a scaled geometry following Mounier et al."""
     return Geometry(
         r1=1.1*r2sor4*r4,
         beta2=-45,
@@ -28,17 +29,18 @@ def scaled_geometry(r4, beta4, b4r4, n_blades, r2sor4, r2sor2h, Cmin, CR):
         rug_imp=1.2e-5,
         clearance=max(Cmin, CR*b4r4*r4),
         backface=max(Cmin, CR*b4r4*r4),
-        ind_rug=1.2e-5,
+        rug_ind=1.2e-5,
         l_ind=4*r4,
         l_comp=0.7*r4,
         blockage=[1., 1., 1., 1., 1.]
     )
 
 
-def upper_bounds(geom: Geometry, in0: ThermoProp, max_tipspeed=600, max_mach=1):
-    n_rot_max = max_tipspeed/geom.r4
+def upper_bounds(geom: Geometry, in0: ThermoProp, max_mach_rot=2.5,
+                 max_mach_flow=0.7) -> Tuple[float, float]:
+    n_rot_max = max_mach_rot * in0.A / geom.r4
 
-    mflow_max = max_mach * in0.A * in0.D * geom.A2_eff
+    mflow_max = max_mach_flow * in0.A * in0.D * geom.A2_eff
 
     return n_rot_max, mflow_max
 
@@ -54,7 +56,7 @@ def calculate_on_op_grid(geom: Geometry, in0: ThermoProp, lb: np.ndarray,
     def calculate_compressor(x: List[float]) -> Tuple[Compressor, float]:
         n_rot, m = x
         op = OperatingCondition(in0=in0, fld=in0.fld,
-                                m=m, n_rot=n_rot/30*np.pi)
+                                m=m, n_rot=n_rot)
         t0 = time.perf_counter()
         comp = Compressor(geom, op)
         comp.calculate()
