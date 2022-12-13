@@ -26,11 +26,15 @@ class Compressor:
         self.power = math.nan
         self.Ns = math.nan
         self.Ds = math.nan
+        self.m_in = math.nan
+        self.head = math.nan
+        self.d_head_d_flow = math.nan
         self.tip_speed = geom.r4 * op.n_rot
         self.n_rot_corr = self.tip_speed / op.in0.A
-        self.m_in = math.nan
+        self.V_in = self.op.m / op.in0.D
+        self.flow = self.V_in / (self.tip_speed * self.geom.r4**2)
 
-    def calculate(self) -> bool:
+    def calculate(self, delta_check=True) -> bool:
         # Inducer
         self.ind = Inducer(self.geom, self.op)
         if self.ind.choke_flag:
@@ -69,10 +73,23 @@ class Compressor:
 
         tp_is = self.op.fld.thermo_prop('PS', self.out.total.P, self.in_.total.S)
         self.dh0s = tp_is.H - self.in_.total.H
+        self.head = self.dh0s / (self.tip_speed**2)
+
+        # Assess surge by calculating dHead/dFlow should be < 0
+        if delta_check:
+            d_op = OperatingCondition(**self.op.__dict__)
+            d_op.m += 1e-4
+            d_comp = Compressor(self.geom, d_op)
+            if d_comp.calculate(delta_check=False):
+                self.d_head_d_flow = (d_comp.head - self.head) / (d_comp.flow - self.flow)
+                if self.d_head_d_flow > -1e-4:
+                    self.invalid_flag = True
+                    return False
+
         self.eff = self.dh0s / dh
         self.PR = PR
         self.power = self.op.m * dh
-        sqrt_v_in = (self.op.m / self.in_.total.D)**0.5
+        sqrt_v_in = (self.V_in)**0.5
         self.Ns = self.op.n_rot * sqrt_v_in / (self.dh0s**0.75)
         self.Ds = 2*self.geom.r4*self.dh0s**0.25 / sqrt_v_in
 
