@@ -23,7 +23,7 @@ class Geometry:
     rug_imp: float
     clearance: float
     backface: float
-    ind_rug: float
+    rug_ind: float
     l_ind: float
     l_comp: float
 

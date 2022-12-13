@@ -79,7 +79,7 @@ class Inducer:
                 err2 = (op.m - geom.A2_eff*c2*Stat2.D) / op.m
 
                 Re = c2 * 2*geom.r2s * Stat2.D / Stat2.V
-                Cf = moody(Re, geom.ind_rug/(2*geom.r2s))
+                Cf = moody(Re, geom.rug_ind/(2*geom.r2s))
                 dP = 4*Cf*geom.l_ind*c2**2/(4*geom.r2s)*Stat2.D
                 Pout_calc = in_total.P - dP
                 err3 = (Pout_calc - Tot2.P) / in_total.P
@@ -112,7 +112,7 @@ class Inducer:
 
         c2_guess = op.m / geom.A2_eff / self.in1.static.D
         Re_g = c2_guess * 2*geom.r2s * self.in1.static.D / self.in1.static.V
-        Cf_g = moody(Re_g, geom.ind_rug/(2*geom.r2s))
+        Cf_g = moody(Re_g, geom.rug_ind/(2*geom.r2s))
         dP = 4*Cf_g*geom.l_ind*c2_guess**2/(4*geom.r2s)*self.in1.static.D
 
         Pout_guess = self.in1.total.P - dP
