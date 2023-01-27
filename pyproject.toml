@@ -9,7 +9,7 @@ version = "1.0.0b"
 dependencies = [
     "numpy",
     "scipy",
-    "CoolProp >= 6.0",
+    "CoolProp >= 6.4.3",
 ]
 
 [tool.setuptools]
