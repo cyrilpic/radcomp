@@ -50,6 +50,7 @@ def simulate(df, geom_file=None):
     compressors = []
     out = {n: np.empty(len(df), dtype=t) for n, t in out_meta.dtypes.items()}
     out['geom_id'] = df.geom_id
+    out['fluid'] = df.fluid
 
     for row in df.itertuples():
         blockage = geom_t.loc[row.geom_id, blockage_columns].values.tolist()

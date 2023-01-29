@@ -96,7 +96,7 @@ def sample_geometries(method, npoints, output):
     iparams = {k: iX[:, i] for i, k in enumerate(independent_parameters.keys())}
     for i, (k, str_exprs) in enumerate(relative_parameters.items()):
         lb = eval_(ast.parse(str_exprs[0], mode='eval').body, iparams)
-        ub = eval_(ast.parse(str_exprs[0], mode='eval').body, iparams)
+        ub = eval_(ast.parse(str_exprs[1], mode='eval').body, iparams)
         iparams[k] = lb + (ub - lb) * rX[:, i]
 
     for k, str_expr in fixed_parameters.items():

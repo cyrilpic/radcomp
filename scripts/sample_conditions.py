@@ -12,7 +12,7 @@ from radcomp import thermo
 
 
 parameters = {
-    'T_range': [150, 400],  # K
+    'T_range': [170, 400],  # K
     'Pr': [1, 120],
     'm_in': [5e-2, 0.7],
     'mach_tip': [5e-2, 2.5]
@@ -47,7 +47,7 @@ def main(geometries, output, fluid, fluid_type, batch_size, n_points, n_inlet):
 
     geom_ds = ds.dataset(geometries)
 
-    T_range = np.array([max(fld.T_triple+10, parameters['T_range'][0]),
+    T_range = np.array([max(fld.T_triple+30, parameters['T_range'][0]),
                         min(fld.T_max-50, parameters['T_range'][1])])
 
     for b in geom_ds.to_batches(batch_size=batch_size, columns=['geom_id']):
