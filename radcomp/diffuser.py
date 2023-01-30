@@ -69,10 +69,10 @@ class VanelessDiffuser:
 
                 c5m = x[i]
                 c5 = (c5m**2 + c5t**2)**0.5
-                # if (c5 > 1.25 * in_.total.A):
-                #     # Choke
-                #     err.extend((self.n_steps-i)*[1e4])
-                #     return err
+                if (c5 > 1.25 * in_.total.A):
+                    # Choke
+                    err.extend((self.n_steps-i)*[1e4])
+                    return err
 
                 try:
                     stat = static_from_total(tot, c5)

@@ -1,5 +1,5 @@
 import time
-from typing import List, Tuple, Iterator
+from typing import Iterator, List, Tuple
 
 import numpy as np
 
@@ -48,7 +48,9 @@ def upper_bounds(geom: Geometry, in0: ThermoProp, max_mach_rot=2.5,
 def calculate_on_op_grid(geom: Geometry, in0: ThermoProp, lb: np.ndarray,
                          ub: np.ndarray, resolution=0.005,
                          map_func=map) -> Tuple[np.ndarray, Iterator]:
-    xx, yy = np.mgrid[0:1:resolution, 0:1:resolution]
+    if not isinstance(resolution, List):
+        resolution = [resolution, resolution]
+    xx, yy = np.mgrid[0:1:resolution[0], 0:1:resolution[1]]
     grid = np.c_[xx.ravel(), yy.ravel()]
 
     X = grid * (ub - lb) + lb

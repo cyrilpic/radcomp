@@ -78,7 +78,7 @@ class Compressor:
         # Assess surge by calculating dHead/dFlow should be < 0
         if delta_check:
             d_op = OperatingCondition(**self.op.__dict__)
-            d_op.m += 1e-4
+            d_op.m *= 1.005
             d_comp = Compressor(self.geom, d_op)
             if d_comp.calculate(delta_check=False):
                 self.d_head_d_flow = (d_comp.head - self.head) / (d_comp.flow - self.flow)
