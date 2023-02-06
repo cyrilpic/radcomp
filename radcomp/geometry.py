@@ -1,6 +1,6 @@
 import math
 from dataclasses import dataclass, fields
-from typing import List
+from typing import List, Union
 
 
 @dataclass
@@ -82,10 +82,17 @@ class Geometry:
         return Dh, Lh
 
     @classmethod
-    def from_dict(cls, data: dict, blockage: List[float]):
-        """Create a Geometry instance from a geometry structure from MATLAB"""
+    def from_dict(cls, data: dict, blockage: Union[List[float], None] = None):
+        """Create a Geometry instance from a geometry structure from MATLAB or
+        from a file"""
         safe_names = [f.name for f in fields(cls)]
         d = {}
+
+        if blockage is None and 'blockage1' in data:
+            blockage = [data[f'blockage{i+1}'] for i in range(5)]
+
+        if blockage is None:
+            raise ValueError("Blockage needs to be provided as an argument or in data.")
 
         for k, v in data.items():
             if k.lower() in safe_names:

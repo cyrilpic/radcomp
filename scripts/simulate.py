@@ -44,17 +44,13 @@ def simulate(df, geom_file=None):
                                     ('geom_id', '<=', df.geom_id.max())]).to_pandas()
     fld = CoolPropFluid(df.fluid.iloc[0])
 
-    blockage_columns = geom_t.columns[geom_t.columns.str.startswith('blockage')]
-    geom_columns = geom_t.columns.drop(blockage_columns)
-
     compressors = []
     out = {n: np.empty(len(df), dtype=t) for n, t in out_meta.dtypes.items()}
     out['geom_id'] = df.geom_id
     out['fluid'] = df.fluid
 
     for row in df.itertuples():
-        blockage = geom_t.loc[row.geom_id, blockage_columns].values.tolist()
-        geom = Geometry(blockage=blockage, **geom_t.loc[row.geom_id, geom_columns].to_dict())
+        geom = Geometry.from_dict(geom_t.loc[row.geom_id, :].to_dict())
         in0 = fld.thermo_prop('PT', row.in_P, row.in_T)
         m_f = row.in_m_in0 * in0.A * in0.D * geom.A2_eff
         tip_speed = row.in_mach_tip * in0.A
