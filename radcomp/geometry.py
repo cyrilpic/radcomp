@@ -9,9 +9,9 @@ class Geometry:
     r1: float  # Inducer inlet radius
     r2s: float  # Shroud tip radius
     r2h: float  # Impeller hub radius
-    beta2: float  # Impeller inlet angle
+    beta2: float  # Mid-blade impeller inlet angle
     beta2s: float  # Impeller shroud angle
-    alpha2: float  # 
+    alpha2: float  # Inlet flow angle
     r4: float  # Tip radius
     b4: float  # Blade height
     r5: float  # Diffuser outlet radius
@@ -19,13 +19,13 @@ class Geometry:
     beta4: float  # Impeller outlet angle
     n_blades: int  # Number of blades
     n_splits: int  # Number of splitter blades
-    blade_e: float  # 
-    rug_imp: float
-    clearance: float
-    backface: float
-    rug_ind: float
-    l_ind: float
-    l_comp: float
+    blade_e: float  # Blade thickness
+    rug_imp: float  # Impeller surface roughness
+    clearance: float  # Tip clearance
+    backface: float  # Backface clearance
+    rug_ind: float  # Inducer surface roughness
+    l_ind: float  # Inducer length
+    l_comp: float  # Impeller length
 
     blockage: List[float]
 

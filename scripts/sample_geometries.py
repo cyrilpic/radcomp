@@ -11,14 +11,14 @@ from scipy.stats.qmc import Sobol
 
 # supported operators
 operators = {ast.Add: np.add, ast.Sub: np.subtract, ast.Mult: np.multiply,
-             ast.Div: np.true_divide, ast.USub: np.negative}
+             ast.Div: np.true_divide, ast.USub: np.negative, ast.LtE: np.less_equal}
 
 
 independent_parameters = {
     'r4': [0.005, 0.075],
-    'beta4': [-45., 0.],
-    'beta2': [-56., -45.],
-    'n_blades': [5, 11],
+    'beta4': [-60., 0.],
+    'beta2': [-70., -35.],
+    'n_blades': [5, 20],
     'blade_e': [1.e-4, 5.e-4],
     'blockage1': [0.8, 1.],
     'blockage2': [0.8, 1.],
@@ -33,19 +33,19 @@ relative_parameters = {
     'r2s': ['1.2*r2h', '0.7*r4'],
     'r1': ['r2s', 'r4'],
     'r5': ['1*r4', '1.5*r4'],
+    'b5': ['0.5*b4', '1.5*b4'],
     'l_ind': ['1*r4', '4*r4'],
     'clearance': ['0.01*b4', '0.15*b4'],
-    'backface': ['0.001*r4', '0.15*r4']
+    'backface': ['0.001*r4', '0.15*r4'],
+    'beta2s': ['beta2-20', 'beta2'],
 }
 
 fixed_parameters = {
-    'b5': 'b4',
     'rug_imp': '1.2e-5',
     'rug_ind': '1.2e-5',
     'l_comp': '0.7*r4',
-    'n_splits': 'n_blades',
-    'alpha2': '0.',
-    'beta2s': '-60.'
+    'n_splits': '(n_blades<=11)*n_blades',
+    'alpha2': '0.'
 }
 
 
@@ -56,6 +56,8 @@ def eval_(node, iparams):
         return iparams[node.id]
     elif isinstance(node, ast.BinOp):  # <left> <operator> <right>
         return operators[type(node.op)](eval_(node.left, iparams), eval_(node.right, iparams))
+    elif isinstance(node, ast.Compare) and len(node.ops) == 1:  # <left> <operator> <right> only single comparison supported
+        return operators[type(node.ops[0])](eval_(node.left, iparams), eval_(node.comparators[0], iparams))
     elif isinstance(node, ast.UnaryOp):  # <operator> <operand> e.g., -1
         return operators[type(node.op)](eval_(node.operand, iparams))
     else:

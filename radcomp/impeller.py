@@ -209,7 +209,7 @@ class Impeller:
 
                 w4_new = (w4t**2 + c4m**2)**0.5
                 beta4_f_new = -math.asin(w4t/w4_new)*180/pi
-                err.append((beta4_f_new - beta4_f) / geom.beta4)
+                err.append((beta4_f_new - beta4_f) / 90.)
 
                 # Part 2 Pressure
                 c4 = (c4t**2 + c4m**2)**0.5
