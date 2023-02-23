@@ -13,7 +13,15 @@ from radcomp import thermo
 
 parameters = {
     'T_range': [170, 400],  # K
-    'Pr': [1, 120],
+    'Pr': [1, 100]
+}
+
+parameters_narrow = {
+    'm_in': [0.15, 0.25],
+    'mach_tip': [0.35, 0.6]
+}
+
+parameters_wide = {
     'm_in': [5e-2, 0.7],
     'mach_tip': [5e-2, 2.5]
 }
@@ -22,19 +30,25 @@ parameters = {
 @click.command()
 @click.option('--geometries', '-g', type=click.Path(exists=True, dir_okay=False))
 @click.option('--output', type=click.Path(file_okay=False), default='data', help="Folder where dataset subfolders will be created")
-@click.option('--fluid', type=str, required=True)
+@click.option('--output-row-size', default=5000)
+@click.option('--fluid', '-f', 'fluid_list', type=str, required=True, multiple=True)
 @click.option('--fluid-type', type=click.Choice(['coolprop', 'refprop']), default='coolprop')
 @click.option('--batch-size', '-b', default=100000)
 @click.option('--n-points', '-no', default=10, help="Number of operating points (Mf, Nrot)")
 @click.option('--n-inlet', '-ni', default=10, help="Number of inlet conditions (Pin, Tin)")
-def main(geometries, output, fluid, fluid_type, batch_size, n_points, n_inlet):
+@click.option('--narrow/--wide', default=False)
+def main(geometries, output, output_row_size, fluid_list, fluid_type, batch_size, n_points, n_inlet, narrow):
     """Sample conditions for the provided geometries"""
+    # Set bounds
+    if narrow:
+        parameters.update(parameters_narrow)
+    else:
+        parameters.update(parameters_wide)
     # Prepare fluid and load to check if it exists
     if fluid_type == 'coolprop':
-        fld = thermo.CoolPropFluid(fluid)
+        fld = {f: thermo.CoolPropFluid(f) for f in fluid_list}
     elif fluid_type == 'refprop':
-        fld = thermo.RefpropFluid(fluid)
-        fld.activate()
+        fld = {f: thermo.RefpropFluid(f) for f in fluid_list}
 
     # Prepare rng
     rng = np.random.default_rng()
@@ -42,24 +56,24 @@ def main(geometries, output, fluid, fluid_type, batch_size, n_points, n_inlet):
     geometries = pathlib.Path(geometries)
     output_subfolder = pathlib.Path(output) / (os.path.splitext(geometries.parts[-1])[0] + "_tabular")
     output_subfolder.mkdir(exist_ok=True)
-    output_subfolder /= f'fluid={fluid}'
-    output_subfolder.mkdir(exist_ok=True)
 
     geom_ds = ds.dataset(geometries)
 
-    T_range = np.array([max(fld.T_triple+30, parameters['T_range'][0]),
-                        min(fld.T_max-50, parameters['T_range'][1])])
-
-    for b in geom_ds.to_batches(batch_size=batch_size, columns=['geom_id']):
+    for b in geom_ds.to_batches(batch_size=batch_size//(n_points*n_inlet), columns=['geom_id']):
         geom_idx = b.to_pandas().index
         n_geom = len(geom_idx)
 
-        Teff = rng.uniform(low=T_range[0], high=T_range[1], size=n_geom*n_inlet)
+        fluids = rng.choice(fluid_list, size=n_geom*n_inlet, replace=True)
+        T_triple, T_max, T_crit, P_crit = np.array([[fld[f].T_triple, fld[f].T_max, fld[f].T_crit, fld[f].P_crit] for f in fluids]).T
+        T_low = np.maximum(T_triple+30, parameters['T_range'][0])
+        T_high = np.minimum(T_max-50, parameters['T_range'][1])
 
-        Pmax = fld.P_crit * (Teff > fld.T_crit)
-        Pmax[Pmax == 0] = [fld.thermo_prop('TQ', t, 1).P for t in Teff[Pmax == 0]]
+        Teff = rng.uniform(low=T_low, high=T_high, size=n_geom*n_inlet)
 
-        Pmax[Pmax > fld.P_crit/3] = fld.P_crit/3
+        Pmax = P_crit * (Teff > T_crit)
+        Pmax[Pmax == 0] = [fld[f].thermo_prop('TQ', t, 1).P for t, f in zip(Teff[Pmax == 0], fluids[Pmax == 0])]
+
+        Pmax[Pmax > P_crit/3] = P_crit[Pmax > P_crit/3]/3
 
         Peff_r = parameters['Pr'][0] + (1-rng.power(5, len(Teff))) * (parameters['Pr'][1]-parameters['Pr'][0])
         Peff = Pmax/Peff_r
@@ -69,15 +83,17 @@ def main(geometries, output, fluid, fluid_type, batch_size, n_points, n_inlet):
 
         df = pd.DataFrame({
             'geom_id': geom_idx.repeat(n_inlet*n_points),
+            'fluid': fluids.repeat(n_points),
             'in_T': Teff.repeat(n_points),
             'in_P': Peff.repeat(n_points),
             'in_m_in0': m_in,
-            'in_mach_tip': mach_tip,
-        }).set_index('geom_id')
+            'in_mach_tip': mach_tip
+        })
+        df.index.name = 'cond_id'
 
-        table = pa.Table.from_pandas(df)
+        table = pa.Table.from_pandas(df, preserve_index=True)
         table_name = output_subfolder / f'data_{geom_idx.min()}-{geom_idx.max()}.parquet'
-        pq.write_table(table, table_name, row_group_size=n_geom*n_inlet)
+        pq.write_table(table, table_name, row_group_size=output_row_size)
 
 
 if __name__ == '__main__':
