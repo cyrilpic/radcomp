@@ -101,3 +101,6 @@ cython_debug/
 
 # No raw data
 data
+
+**/AutogluonModels
+**/AutogluonModels?

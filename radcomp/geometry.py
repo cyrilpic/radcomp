@@ -25,7 +25,7 @@ class Geometry:
     backface: float  # Backface clearance
     rug_ind: float  # Inducer surface roughness
     l_ind: float  # Inducer length
-    l_comp: float  # Impeller length
+    l_comp: float  # Impeller length --> no impact on calculation
 
     blockage: List[float]
 
@@ -77,7 +77,7 @@ class Geometry:
             1. / (self.n_blades/math.pi/math.cos(self.beta4/180*math.pi)
                   + 2. * self.r4/self.b4)
             + self.r2s/self.r4 / (2./(1.-la) + 2. * (self.n_blades)/math.pi/(1+la)
-                                  * (math.sqrt(1 + (1+la**2/2)*math.tan(self.beta2s)**2))))
+                                  * (math.sqrt(1 + (1+la**2/2)*math.tan(self.beta2s/180*math.pi)**2))))
         Lh = self.r4 * (1-self.r2rms*2/0.3048)/(math.cos(self.beta4/180*math.pi))
         return Dh, Lh
 

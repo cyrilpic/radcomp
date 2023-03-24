@@ -18,7 +18,7 @@ parameters = {
 
 parameters_narrow = {
     'm_in': [0.15, 0.25],
-    'mach_tip': [0.35, 0.6]
+    'mach_tip': [0.35, 0.7]
 }
 
 parameters_wide = {
@@ -33,7 +33,7 @@ parameters_wide = {
 @click.option('--output-row-size', default=5000)
 @click.option('--fluid', '-f', 'fluid_list', type=str, required=True, multiple=True)
 @click.option('--fluid-type', type=click.Choice(['coolprop', 'refprop']), default='coolprop')
-@click.option('--batch-size', '-b', default=100000)
+@click.option('--batch-size', '-b', default=20000)
 @click.option('--n-points', '-no', default=10, help="Number of operating points (Mf, Nrot)")
 @click.option('--n-inlet', '-ni', default=10, help="Number of inlet conditions (Pin, Tin)")
 @click.option('--narrow/--wide', default=False)
@@ -59,7 +59,9 @@ def main(geometries, output, output_row_size, fluid_list, fluid_type, batch_size
 
     geom_ds = ds.dataset(geometries)
 
-    for b in geom_ds.to_batches(batch_size=batch_size//(n_points*n_inlet), columns=['geom_id']):
+    idx_offset = 0
+
+    for b in geom_ds.to_batches(batch_size=batch_size, columns=['geom_id']):
         geom_idx = b.to_pandas().index
         n_geom = len(geom_idx)
 
@@ -71,12 +73,16 @@ def main(geometries, output, output_row_size, fluid_list, fluid_type, batch_size
         Teff = rng.uniform(low=T_low, high=T_high, size=n_geom*n_inlet)
 
         Pmax = P_crit * (Teff > T_crit)
-        Pmax[Pmax == 0] = [fld[f].thermo_prop('TQ', t, 1).P for t, f in zip(Teff[Pmax == 0], fluids[Pmax == 0])]
+        Pmax[Pmax == 0] = [fld[f].thermo_prop('TQ', t, 1).P - 1.1e-4 for t, f in zip(Teff[Pmax == 0], fluids[Pmax == 0])]
+        # 1.1e-4 added to avoid Coolprop issues
 
         Pmax[Pmax > P_crit/3] = P_crit[Pmax > P_crit/3]/3
 
         Peff_r = parameters['Pr'][0] + (1-rng.power(5, len(Teff))) * (parameters['Pr'][1]-parameters['Pr'][0])
         Peff = Pmax/Peff_r
+
+        # Validate that each condition is valid
+        [fld[f].thermo_prop('PT', p, t).P - 1.1e-4 for t, f, p in zip(Teff, fluids, Peff)]
 
         m_in = rng.uniform(low=parameters['m_in'][0], high=parameters['m_in'][1], size=n_geom*n_inlet*n_points)
         mach_tip = rng.uniform(low=parameters['mach_tip'][0], high=parameters['mach_tip'][1], size=n_geom*n_inlet*n_points)
@@ -90,6 +96,9 @@ def main(geometries, output, output_row_size, fluid_list, fluid_type, batch_size
             'in_mach_tip': mach_tip
         })
         df.index.name = 'cond_id'
+
+        df.index += idx_offset
+        idx_offset = df.index.max() + 1
 
         table = pa.Table.from_pandas(df, preserve_index=True)
         table_name = output_subfolder / f'data_{geom_idx.min()}-{geom_idx.max()}.parquet'
