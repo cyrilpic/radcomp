@@ -10,7 +10,7 @@ from .geometry import Geometry
 from .thermo import ThermoException, ThermoProp, static_from_total
 
 
-State = TypeVar('State', bound='InducerState')
+State = TypeVar("State", bound="InducerState")
 
 
 @dataclass
@@ -29,7 +29,7 @@ class InducerState:
         return math.isnan(self.total.P)
 
     @classmethod
-    def from_state(cls: Type[State], state: 'InducerState') -> State:
+    def from_state(cls: Type[State], state: "InducerState") -> State:
         """Create a copy of `state`"""
         cls_fields = [f.name for f in fields(cls)]
         content = {k: v for k, v in state.__dict__.items() if k in cls_fields}
@@ -64,7 +64,7 @@ class Inducer:
             c1 = x
             try:
                 Stat1 = static_from_total(in_total, c1)
-                err1 = (op.m - geom.A1_eff*c1*Stat1.D) / op.m
+                err1 = (op.m - geom.A1_eff * c1 * Stat1.D) / op.m
             except ThermoException:
                 return 1e3
             else:
@@ -73,14 +73,14 @@ class Inducer:
         def resolve_out(x):
             c2, Pout = x
             try:
-                Tot2 = op.fld.thermo_prop('PH', Pout, in_total.H + self.heat/op.m)
+                Tot2 = op.fld.thermo_prop("PH", Pout, in_total.H + self.heat / op.m)
                 Stat2 = static_from_total(Tot2, c2)
 
-                err2 = (op.m - geom.A2_eff*c2*Stat2.D) / op.m
+                err2 = (op.m - geom.A2_eff * c2 * Stat2.D) / op.m
 
-                Re = c2 * 2*geom.r2s * Stat2.D / Stat2.V
-                Cf = moody(Re, geom.rug_ind/(2*geom.r2s))
-                dP = 4*Cf*geom.l_ind*c2**2/(4*geom.r2s)*Stat2.D
+                Re = c2 * 2 * geom.r2s * Stat2.D / Stat2.V
+                Cf = moody(Re, geom.rug_ind / (2 * geom.r2s))
+                dP = 4 * Cf * geom.l_ind * c2**2 / (4 * geom.r2s) * Stat2.D
                 Pout_calc = in_total.P - dP
                 err3 = (Pout_calc - Tot2.P) / in_total.P
             except ThermoException:
@@ -111,9 +111,9 @@ class Inducer:
             return
 
         c2_guess = op.m / geom.A2_eff / self.in1.static.D
-        Re_g = c2_guess * 2*geom.r2s * self.in1.static.D / self.in1.static.V
-        Cf_g = moody(Re_g, geom.rug_ind/(2*geom.r2s))
-        dP = 4*Cf_g*geom.l_ind*c2_guess**2/(4*geom.r2s)*self.in1.static.D
+        Re_g = c2_guess * 2 * geom.r2s * self.in1.static.D / self.in1.static.V
+        Cf_g = moody(Re_g, geom.rug_ind / (2 * geom.r2s))
+        dP = 4 * Cf_g * geom.l_ind * c2_guess**2 / (4 * geom.r2s) * self.in1.static.D
 
         Pout_guess = self.in1.total.P - dP
 
@@ -126,8 +126,9 @@ class Inducer:
 
         # Assign output state
         self.out = InducerState(
-            total=op.fld.thermo_prop('PH', Pout, in_total.H + self.heat/op.m),
-            isentropic=op.fld.thermo_prop('PS', Pout, in_total.S))
+            total=op.fld.thermo_prop("PH", Pout, in_total.H + self.heat / op.m),
+            isentropic=op.fld.thermo_prop("PS", Pout, in_total.S),
+        )
         self.out.c = c2
         self.out.static = static_from_total(self.out.total, c2)
         self.out.m_abs = c2 / self.out.static.A

@@ -1,4 +1,4 @@
-__all__ = ['Fluid', 'ThermoException', "ThermoProp"]
+__all__ = ["Fluid", "ThermoException", "ThermoProp"]
 
 from dataclasses import dataclass, field
 from math import nan
@@ -10,6 +10,7 @@ class ThermoException(Exception):
 
 class Fluid:
     """Abstract base class for fluids"""
+
     def activate(self):
         pass
 
@@ -20,6 +21,7 @@ class Fluid:
 @dataclass(frozen=True)
 class ThermoProp:
     """Thermodynamic properties storage class"""
+
     P: float = nan
     T: float = nan
     D: float = nan
@@ -27,5 +29,5 @@ class ThermoProp:
     S: float = nan
     A: float = nan
     V: float = nan
-    phase: str = ''
+    phase: str = ""
     fld: Fluid = field(default_factory=Fluid)

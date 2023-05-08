@@ -50,7 +50,9 @@ class Compressor:
             return False
 
         # Check surge
-        alpha_crit = surge_critical_angle(self.geom.r5, self.geom.r4, self.geom.b4, self.imp.out.m_abs)
+        alpha_crit = surge_critical_angle(
+            self.geom.r5, self.geom.r4, self.geom.b4, self.imp.out.m_abs
+        )
         if self.imp.out.alpha > alpha_crit:
             self.invalid_flag = True
             return False
@@ -71,7 +73,7 @@ class Compressor:
             self.invalid_flag = True
             return False
 
-        tp_is = self.op.fld.thermo_prop('PS', self.out.total.P, self.in_.total.S)
+        tp_is = self.op.fld.thermo_prop("PS", self.out.total.P, self.in_.total.S)
         self.dh0s = tp_is.H - self.in_.total.H
         self.head = self.dh0s / (self.tip_speed**2)
 
@@ -81,7 +83,9 @@ class Compressor:
             d_op.m *= 1.005
             d_comp = Compressor(self.geom, d_op)
             if d_comp.calculate(delta_check=False):
-                self.d_head_d_flow = (d_comp.head - self.head) / (d_comp.flow - self.flow)
+                self.d_head_d_flow = (d_comp.head - self.head) / (
+                    d_comp.flow - self.flow
+                )
                 if self.d_head_d_flow > -1e-4:
                     self.invalid_flag = True
                     return False
@@ -89,8 +93,8 @@ class Compressor:
         self.eff = self.dh0s / dh
         self.PR = PR
         self.power = self.op.m * dh
-        sqrt_v_in = (self.V_in)**0.5
+        sqrt_v_in = self.V_in**0.5
         self.Ns = self.op.n_rot * sqrt_v_in / (self.dh0s**0.75)
-        self.Ds = 2*self.geom.r4*self.dh0s**0.25 / sqrt_v_in
+        self.Ds = 2 * self.geom.r4 * self.dh0s**0.25 / sqrt_v_in
 
         return not self.invalid_flag
