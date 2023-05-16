@@ -13,14 +13,16 @@ from .thermolibs.base import Fluid, ThermoException, ThermoProp
 try:
     from .thermolibs.coolprop import CoolPropFluid
 except ImportError as e:
-    print(e)
     CoolPropFluid = None
 
 try:
     from .thermolibs.refprop import RefpropFluid
 except (ImportError, KeyError) as e:
-    print(e)
     RefpropFluid = None
+
+
+if CoolPropFluid is None and RefpropFluid is None:
+    raise ImportError("No thermodynamic library available. Install CoolProp or Refprop.")
 
 
 def static_from_total(tot: ThermoProp, speed: float) -> ThermoProp:

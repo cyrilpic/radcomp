@@ -1,0 +1,449 @@
+- name: Schiffmann and Favrat
+  geom:
+    r1: 0.01
+    r2s: 0.0056
+    r2h: 0.002
+    beta2: -45.
+    beta2s: -56.
+    alpha2: 0.
+    r4: 0.01
+    b4: 0.0012
+    beta4: -45.
+    n_blades: 9
+    n_splits: 9
+    r5: 0.0165
+    b5: 0.0012
+    blade_e: 1.e-4
+    rug_imp: 1.e-5
+    clearance: 15.e-6
+    backface: 0.001
+    rug_ind: 1.e-4
+    l_ind: 0.02
+    l_comp: 0.01
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: R134a
+    in_P: 165.e+3
+    in_T: 265.
+
+- name: Javed, Pecnik and van Buijtenen
+  geom:
+    r1: 0.0131
+    r2s: 0.0131
+    r2h: 0.0048
+    beta2: -65.
+    beta2s: -65.
+    alpha2: 0.
+    r4: 0.0185
+    b4: 0.0026
+    beta4: -35.
+    n_blades: 6
+    n_splits: 6
+    r5: 0.033
+    b5: 0.0017
+    blade_e: 0.5e-3
+    clearance: 150.e-6
+    rug_imp: 1.e-5
+    backface: 0.001
+    rug_ind: 1.e-4
+    l_ind: 0.02
+    l_comp: 0.018
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: Javed, Arpagaus, Bertsch and Schiffmann
+  geom:
+    r1: 0.00362
+    r2s: 0.00362
+    r2h: 0.0015
+    beta2: -55.
+    beta2s: -60.
+    alpha2: 0.
+    r4: 0.00762
+    b4: 0.00062
+    beta4: -45.
+    n_blades: 8
+    n_splits: 8
+    r5: 0.01257
+    b5: 0.000405
+    blade_e: 0.25e-3
+    clearance: 80.e-6
+    rug_imp: 1.e-5
+    backface: 0.001
+    rug_ind: 1.e-4
+    l_ind: 0.02
+    l_comp: 0.018
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: R134a
+    in_P: 1.01e5
+    in_T: 288.15
+
+
+- name: Sandia
+  geom:
+    r1: 0.01
+    r2s: 0.0094
+    r2h: 0.00254
+    beta2: -45.
+    beta2s: -50.
+    alpha2: 0.
+    r4: 0.01868
+    b4: 0.00171
+    beta4: -50.
+    n_blades: 6
+    n_splits: 6
+    r5: 0.0191
+    b5: 0.00171
+    blade_e: 762.e-6
+    clearance: 254.e-6
+    rug_imp: 1.e-5
+    backface: 254.e-6
+    rug_ind: 1.e-4
+    l_ind: 0.02
+    l_comp: 0.1137
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: CO2
+    in_P: 769.e+3
+    in_T: 305.97
+
+- name: Eckardt A
+  geom:
+    r1: 0.14
+    r2s: 0.14
+    r2h: 0.06
+    beta2: -53.
+    beta2s: -63.
+    alpha2: 0.
+    r4: 0.2
+    b4: 0.0267
+    beta4: -30.
+    n_blades: 20
+    n_splits: 0
+    r5: 0.538
+    b5: 0.0136
+    blade_e: 2.11e-3
+    rug_imp: 2.e-5
+    clearance: 213.e-6
+    backface: 235.e-6
+    rug_ind: 2.e-5
+    l_ind: 0.02
+    l_comp: 0.13
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: Eckardt B
+  geom:
+    r1: 0.14
+    r2s: 0.14
+    r2h: 0.096
+    beta2: -53.
+    beta2s: -60.
+    alpha2: 0.
+    r4: 0.2
+    b4: 0.0267
+    beta4: -40.
+    n_blades: 20
+    n_splits: 0
+    r5: 0.738
+    b5: 0.0136
+    blade_e: 2.11e-3
+    rug_imp: 2.e-5
+    clearance: 372.e-6
+    backface: 372.e-6
+    rug_ind: 2.e-5
+    l_ind: 0.02
+    l_comp: 0.13
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: Eckardt O
+  geom:
+    r1: 0.14
+    r2s: 0.14
+    r2h: 0.045
+    beta2: -50.
+    beta2s: -63.
+    alpha2: 0.
+    r4: 0.2
+    b4: 0.0267
+    beta4: 0.
+    n_blades: 20
+    n_splits: 0
+    r5: 0.338
+    b5: 0.0136
+    blade_e: 2.11e-3
+    rug_imp: 2.e-5
+    clearance: 372.e-6
+    backface: 372.e-6
+    rug_ind: 2.e-5
+    l_ind: 0.02
+    l_comp: 0.13
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: De Bellis Turbo A
+  geom:
+    r1: 0.022
+    r2s: 0.022
+    r2h: 0.006
+    beta2: -54.5
+    beta2s: -73.5
+    alpha2: 0.
+    r4: 0.029
+    b4: 0.00469
+    beta4: -39.
+    n_blades: 12
+    n_splits: 12
+    r5: 0.0537
+    b5: 0.00469
+    blade_e: 0.6e-3  # estimated
+    rug_imp: 1.e-5
+    clearance: 0.5e-3
+    backface: 0.5e-3
+    rug_ind: 1.e-4
+    l_ind: 0.0251
+    l_comp: 0.024
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+
+- name: De Bellis Turbo B
+  geom:
+    r1: 0.01725
+    l_ind: 0.070
+    r2s: 0.0145
+    r2h: 0.005
+    beta2: -41.5
+    beta2s: -54.0
+    alpha2: 0.
+    r4: 0.020
+    b4: 0.003
+    beta4: -44.
+    n_blades: 8
+    n_splits: 8
+    r5: 0.032
+    b5: 0.003
+    blade_e: 0.6e-3  # estimated
+    clearance: 0.5e-3
+    backface: 0.5e-3
+    rug_ind: 1.e-4
+    rug_imp: 1.e-5
+    l_comp: 0.0132
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: De Bellis Turbo C
+  geom:
+    r1: 0.01665
+    l_ind: 0.056
+    r2s: 0.01445
+    r2h: 0.0049
+    beta2: -57.4
+    beta2s: -70.
+    alpha2: 0.
+    r4: 0.0194
+    b4: 0.0033
+    beta4: -37.
+    n_blades: 12
+    n_splits: 12
+    r5: 0.04235
+    b5: 0.0033
+    blade_e: 0.6e-3  # estimated
+    clearance: 0.5e-3
+    backface: 0.5e-3
+    rug_ind: 1.e-4
+    rug_imp: 1.e-5
+    l_comp: 0.0138
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: De Bellis Turbo D
+  geom:
+    r1: 0.0236
+    l_ind: 0.0288
+    r2s: 0.018
+    r2h: 0.00655
+    beta2: -43.
+    beta2s: -53.
+    alpha2: 0.
+    r4: 0.0255
+    b4: 0.0035
+    beta4: -42.
+    n_blades: 8
+    n_splits: 8
+    r5: 0.04235
+    b5: 0.003985
+    blade_e: 0.6e-3  # estimated
+    clearance: 0.5e-3
+    backface: 0.5e-3
+    rug_ind: 1.e-4
+    rug_imp: 1.e-5
+    l_comp: 0.0162
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: De Bellis Turbo E
+  geom:
+    r1: 0.0222
+    l_ind: 0.07695
+    r2s: 0.0176
+    r2h: 0.005
+    beta2: -47.6
+    beta2s: -57.5
+    alpha2: 0.
+    r4: 0.0225
+    b4: 0.0035
+    beta4: -39.
+    n_blades: 12
+    n_splits: 12
+    r5: 0.0442
+    b5: 0.0035
+    blade_e: 0.6e-3  # estimated
+    clearance: 0.5e-3
+    backface: 0.5e-3
+    rug_ind: 1.e-4
+    rug_imp: 1.e-5
+    l_comp: 0.0149
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: air
+    in_P: 1.01e5
+    in_T: 288.15
+
+- name: Olmedo and Schiffmann stage 1
+  geom:
+    r1: 0.0152
+    r2s: 0.0152
+    r2h: 0.0058
+    beta2: -39.
+    beta2s: -56.
+    alpha2: 0.
+    r4: 0.0268
+    b4: 0.0039
+    beta4: -45.
+    n_blades: 13
+    n_splits: 0
+    r5: 0.0482
+    b5: 0.003
+    blade_e: 0.9e-3
+    clearance: 0.2e-3
+    backface: 0.15e-3
+    rug_imp: 1.e-3
+    rug_ind: 1.e-3
+    l_ind: 0.0152
+    l_comp: 0.01
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: Ammonia
+    in_P: 315.e+3
+    in_T: 275.
+
+- name: Olmedo and Schiffmann stage 2
+  geom:
+    r1: 0.0154
+    r2s: 0.0154
+    r2h: 0.0056
+    beta2: -45.
+    beta2s: -56.
+    alpha2: 0.
+    r4: 0.0238
+    b4: 0.0041
+    beta4: -30.
+    n_blades: 11
+    n_splits: 0
+    r5: 0.0452
+    b5: 0.00225
+    blade_e: 0.85e-3
+    clearance: 0.2e-3
+    backface: 0.15e-3
+    rug_imp: 1.e-3
+    rug_ind: 1.e-3
+    l_ind: 0.0154
+    l_comp: 0.01
+    blockage1: 1.
+    blockage2: 1.
+    blockage3: 1.
+    blockage4: 1.
+    blockage5: 1.
+  conditions:
+    fluid: Ammonia
+    in_P: 465.e+3
+    in_T: 305.

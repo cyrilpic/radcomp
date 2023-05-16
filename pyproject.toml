@@ -4,12 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "radcomp"
-version = "1.0.0b"
+version = "1.0.0"
 
 dependencies = [
     "numpy",
     "scipy",
     "CoolProp >= 6.4.3",
+]
+
+[project.optional-dependencies]
+generate = [
+    "click >= 8.0.0",
+    "dask >= 2.0.0"
+    "dask_mpi",
+    "pandas >= 1.4.0",
+    "pyarrow >= 11.0.0",
 ]
 
 [tool.setuptools]
