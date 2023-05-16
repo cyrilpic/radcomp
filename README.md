@@ -16,7 +16,7 @@ The dataset related to *DATED* will be uploaded soon.
 
 ## Using the model
 
-### Installation
+### Installation
 
 To install this package, first make sure that you have Python >= 3.9 installed in your environment. If not, we
 recommend to install Python using [mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
