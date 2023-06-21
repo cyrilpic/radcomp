@@ -15,11 +15,11 @@ dependencies = [
 [project.optional-dependencies]
 generate = [
     "click >= 8.0.0",
-    "dask >= 2.0.0"
+    "dask >= 2.0.0",
     "dask_mpi",
     "pandas >= 1.4.0",
     "pyarrow >= 11.0.0",
 ]
 
 [tool.setuptools]
-packages = ['radcomp']
+packages = ["radcomp"]
