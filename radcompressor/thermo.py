@@ -22,7 +22,9 @@ except (ImportError, KeyError) as e:
 
 
 if CoolPropFluid is None and RefpropFluid is None:
-    raise ImportError("No thermodynamic library available. Install CoolProp or Refprop.")
+    raise ImportError(
+        "No thermodynamic library available. Install CoolProp or Refprop."
+    )
 
 
 def static_from_total(tot: ThermoProp, speed: float) -> ThermoProp:
