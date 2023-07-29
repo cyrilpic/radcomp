@@ -27,6 +27,7 @@ generate = [
     "pandas >= 1.4.0",
     "pyarrow >= 11.0.0",
 ]
+test = ["pytest >= 6.0.0"]
 
 [project.urls]
 Homepage = "https://github.com/cyrilpic/radcomp"
@@ -34,3 +35,10 @@ Repository = "https://github.com/cyrilpic/radcomp.git"
 
 [tool.setuptools]
 packages = ["radcompressor"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
