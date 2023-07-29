@@ -33,8 +33,9 @@ test = ["pytest >= 6.0.0"]
 Homepage = "https://github.com/cyrilpic/radcomp"
 Repository = "https://github.com/cyrilpic/radcomp.git"
 
-[tool.setuptools]
-packages = ["radcompressor"]
+[tool.setuptools.packages.find]
+include = ["radcompressor*"]
+exclude = ["tests*"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
