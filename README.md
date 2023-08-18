@@ -12,7 +12,7 @@ Datasets for Engineering Design Applications", 2023.
 
 ## Datasets
 
-The dataset related to *DATED* will be uploaded soon.
+The dataset related to *DATED* is available on [Zenodo](https://zenodo.org/record/8200792).
 
 ## Using the model
 
